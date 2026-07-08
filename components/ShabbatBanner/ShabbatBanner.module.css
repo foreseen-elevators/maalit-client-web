@@ -1,0 +1,8 @@
+.banner {
+  width: 100%;
+  text-align: center;
+  font-size: clamp(0.75rem, 2vw, 1rem);
+  color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 15%, transparent);
+  padding: 0.5rem 1rem;
+}

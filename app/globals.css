@@ -1,13 +1,16 @@
+/* Single dark theme throughout — this is a kiosk-style lobby display first
+   (matches the physical ESP32 screens' black background), and a normal web
+   page second, so we don't branch on prefers-color-scheme. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0a0a0a;
+  --foreground: #f5f5f5;
+  --tile-background: #1a1a1a;
+  --muted: #9a9a9a;
+  --border: #333333;
+  --accent: #4da3ff;
+  --accent-muted: #1f3a52;
+  --warning: #e6b400;
+  color-scheme: dark;
 }
 
 html {
@@ -26,7 +29,8 @@ body {
   flex-direction: column;
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Arial Hebrew", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -42,8 +46,6 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+button {
+  font-family: inherit;
 }

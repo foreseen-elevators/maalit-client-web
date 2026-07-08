@@ -1,0 +1,53 @@
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 0;
+  min-width: 0;
+  background: var(--tile-background);
+  border-radius: clamp(12px, 2vw, 24px);
+  padding: clamp(0.5rem, 3vh, 2rem) clamp(0.5rem, 2vw, 1.5rem);
+  min-height: 0;
+}
+
+.arrowRow {
+  color: var(--accent);
+  font-size: clamp(1.5rem, 6vw, 4rem);
+  line-height: 1;
+  height: clamp(1.5rem, 6vw, 4rem);
+}
+
+.floor {
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(3rem, 20vw, 14rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--foreground);
+  direction: ltr;
+}
+
+.floor.invalid {
+  color: var(--muted);
+}
+
+.footer {
+  margin-top: clamp(0.5rem, 2vh, 1rem);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: clamp(0.75rem, 2vw, 1.25rem);
+  color: var(--muted);
+}
+
+.elevatorLabel {
+  white-space: nowrap;
+}
+
+.staleDot {
+  width: 0.6em;
+  height: 0.6em;
+  border-radius: 50%;
+  background: var(--warning);
+  display: inline-block;
+}

@@ -1,0 +1,30 @@
+.main {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.status {
+  margin: auto;
+  color: var(--muted);
+  font-size: 1.25rem;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  gap: 1rem;
+}
+
+.backLink {
+  color: var(--muted);
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  text-decoration: underline;
+}

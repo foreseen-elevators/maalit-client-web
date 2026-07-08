@@ -1,0 +1,9 @@
+.arrow {
+  display: block;
+}
+
+.empty {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
