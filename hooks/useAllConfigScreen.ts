@@ -47,7 +47,7 @@ export function useAllConfigScreen(
   }, [clientId, addressId]);
 
   // Derived rather than reset via a synchronous setState at the top of the
-  // effect — while state.key doesn't match the current request key yet,
+  // effect - while state.key doesn't match the current request key yet,
   // we're still loading for these props.
   const loading = state.key !== key;
 

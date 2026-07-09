@@ -45,7 +45,7 @@ export function useElevatorReferenceEpoch(
       } catch (err) {
         if (ignore) return;
         if (err instanceof DOMException && err.name === "AbortError") return;
-        // Leave the previous referenceEpoch in place on a transient failure —
+        // Leave the previous referenceEpoch in place on a transient failure -
         // the tick will keep using the last known-good value.
         setState((prev) => ({ ...prev, loading: false }));
       }
@@ -70,7 +70,7 @@ export function useElevatorReferenceEpoch(
   }, [addressId, elevatorIndex]);
 
   // Staleness depends on wall-clock time passing, not just on state changes,
-  // so it needs its own periodic re-check — done here (inside an effect's
+  // so it needs its own periodic re-check - done here (inside an effect's
   // interval callback) rather than computed impurely at render time.
   useEffect(() => {
     function check() {

@@ -4,7 +4,7 @@ This is the web/PWA version of the physical ESP32 "Shabbat elevator" lobby
 screens. A user picks a building address and sees that building's 1-3
 elevators, each showing its current floor and direction, updating live.
 
-It is a **pure frontend** — there is no backend or database in this repo.
+It is a **pure frontend** - there is no backend or database in this repo.
 Every piece of data comes from an existing, already-deployed backend
 (`first-http-node-coolify`, at `https://first-app.055449264.xyz`), called
 directly from the browser.
@@ -30,8 +30,8 @@ installable as a kiosk-style PWA.
 ```
 
 There's no server-side code here beyond what Next.js needs to serve the
-pages themselves. All the elevator logic — fetching, polling, computing the
-current floor — runs in the user's browser.
+pages themselves. All the elevator logic - fetching, polling, computing the
+current floor - runs in the user's browser.
 
 ## The backend, as this app sees it
 
@@ -40,11 +40,11 @@ current floor — runs in the user's browser.
 | `GET /addressList` | `[["<Hebrew address>", <numeric building id>], ...]` | Populates the address search on `/` |
 | `GET /allConfigScreen?id=&address=` | `{ numOfElevators, file1, file2, file3, ... }` | Tells the elevator page how many tiles to render and which schedule file belongs to each |
 | `GET /configScreen?id=&address=&config=file1\|file2\|file3` | Raw text, one floor number per line | Parsed once into a `number[]` "schedule" per elevator |
-| `GET /getElevator?address=&elevatorNum=` | A single epoch-seconds number, or `"0"` | Polled every 2 minutes per elevator — this is the "sync point" the floor is computed from |
-| `GET /shabbatScreen?id=&address=` | `"1"` or `"0"` | Informational banner only — never blocks the display |
+| `GET /getElevator?address=&elevatorNum=` | A single epoch-seconds number, or `"0"` | Polled every 2 minutes per elevator - this is the "sync point" the floor is computed from |
+| `GET /shabbatScreen?id=&address=` | `"1"` or `"0"` | Informational banner only - never blocks the display |
 
 `id` is just any non-empty string this app makes up and remembers in
-`localStorage` (`lib/clientId.ts`) — the backend doesn't validate it against
+`localStorage` (`lib/clientId.ts`) - the backend doesn't validate it against
 a registry for these routes.
 
 None of this is authenticated. It's the same public, CORS-open API the
@@ -60,10 +60,10 @@ something invented for the web.
    second, e.g. `[0, 1, 1, 2, 2, 3, 4, 4, 5, ...]`. Index 5 in that array is
    "what floor the elevator is on 5 seconds into its cycle." This schedule
    is downloaded once from `/configScreen` and never changes during a
-   session — it's a fixed recording of that specific elevator's real timing
+   session - it's a fixed recording of that specific elevator's real timing
    (how long it dwells at each floor, how long it takes to travel between
    floors).
-2. The backend also tracks a **reference epoch** per elevator — a Unix
+2. The backend also tracks a **reference epoch** per elevator - a Unix
    timestamp marking when "second 0" of the current cycle happened. This
    app fetches it via `/getElevator` **every 2 minutes** (matching the
    firmware's `TIME_FETCH_INTERVAL_SEC = 120`).
@@ -76,14 +76,14 @@ something invented for the web.
    value is the special marker `99` ("no data"), the tile shows `"--"`
    instead of a number.
 4. The up/down arrow is computed by scanning forward in the schedule from
-   `diff` to find the next second where the floor differs — if the schedule
+   `diff` to find the next second where the floor differs - if the schedule
    runs out before finding one, the scan **wraps around** to the start.
    This mirrors the firmware's `compute_next_direction()` exactly, including
    the subtle rule that hitting a `99` stops the forward scan immediately
    (it doesn't skip past gaps).
 
 All of this lives in one dependency-free file, **`lib/elevator/floorCalculation.ts`**,
-with no React or fetch code in it at all — it just takes a schedule array,
+with no React or fetch code in it at all - it just takes a schedule array,
 a reference epoch, and "now," and returns `{ valid, floor, direction, displayText }`.
 That's deliberate: it's the one piece of this app where a subtle bug would
 be easy to miss and hard to notice visually, so it has its own test suite
@@ -93,11 +93,11 @@ be easy to miss and hard to notice visually, so it has its own test suite
 ### Why "every 2 minutes" and "every 1 second" separately
 
 - The reference epoch rarely changes and is relatively expensive (a network
-  round trip), so it's polled infrequently — 2 minutes, matching the
+  round trip), so it's polled infrequently - 2 minutes, matching the
   firmware's own interval, chosen because that's frequent enough to notice
   if an elevator's cycle restarts.
 - The displayed floor changes every second, but computing it from
-  `schedule[diff]` is free (no network call) — it's pure arithmetic on data
+  `schedule[diff]` is free (no network call) - it's pure arithmetic on data
   already in memory.
 - The 1-second tick always recomputes `diff` from the actual current
   wall-clock time (`Date.now()`), never from an incrementing counter. That
@@ -142,27 +142,27 @@ rather than waiting for its next scheduled interval.
 `hooks/useWakeLock.ts` calls the browser's Screen Wake Lock API
 (`navigator.wakeLock.request('screen')`). Two things worth knowing:
 
-- The browser/OS **always** releases the lock when the tab is backgrounded —
+- The browser/OS **always** releases the lock when the tab is backgrounded -
   there is no way to prevent that, only to re-acquire it promptly when the
   tab comes back (which this hook does automatically).
 - It's feature-detected. Where it's unsupported (older browsers), the app
   shows a small badge pointing at `/kiosk-help` instead of pretending to
-  work — see below for why that page exists.
+  work - see below for why that page exists.
 
 ## The honest limit: `/kiosk-help`
 
-No website — installed as a PWA or not — can stop the OS from switching to
+No website - installed as a PWA or not - can stop the OS from switching to
 another app, showing a notification on top, or letting someone navigate
 away. That's outside what web technology can control on Android or iOS.
 This app does the two things that *are* possible (Wake Lock + a manual
 Fullscreen button) and, on `/kiosk-help`, gives the actual instructions for
 the OS features that genuinely lock a device down:
 
-- **Android Screen Pinning** — a one-time setting, turned on per device.
-- **iOS Guided Access** — same idea, passcode-protected.
+- **Android Screen Pinning** - a one-time setting, turned on per device.
+- **iOS Guided Access** - same idea, passcode-protected.
 
 Both are manual, one-time, per-device setup steps for whoever installs the
-phone/tablet as a lobby display — the app cannot turn them on for you.
+phone/tablet as a lobby display - the app cannot turn them on for you.
 
 ## PWA
 
@@ -170,7 +170,7 @@ phone/tablet as a lobby display — the app cannot turn them on for you.
 installed to a home screen in `standalone` mode (looks like a dedicated
 app, no browser chrome). The app icons (`app/icon.tsx`, `app/apple-icon.tsx`,
 `app/icon-192|512|512-maskable/route.tsx`) are generated in code via
-Next's `ImageResponse` — there are no binary image files to maintain.
+Next's `ImageResponse` - there are no binary image files to maintain.
 
 There's deliberately **no service worker**. Everything this app shows is
 live-polled; a cached offline copy of "what floor the elevator was on" would
@@ -178,10 +178,10 @@ be actively misleading, not helpful.
 
 ## Deployment
 
-`coolify.json` configures a nixpacks build (Coolify auto-detects Next.js —
+`coolify.json` configures a nixpacks build (Coolify auto-detects Next.js -
 no Dockerfile needed), matching how the sibling backend repo is deployed.
 The only environment-specific setting is `NEXT_PUBLIC_API_BASE_URL`
-(defaults to the real production backend if unset — see `.env.example`).
+(defaults to the real production backend if unset - see `.env.example`).
 
 ## Where to look for what
 

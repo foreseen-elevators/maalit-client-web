@@ -14,7 +14,7 @@ const EMPTY: ScheduleState = { key: "", schedule: null, error: null };
 
 // The schedule file never changes for a given building/elevator during a
 // session, so this fetches once per (addressId, fileKey) and is otherwise
-// static — no polling needed here (that's useElevatorReferenceEpoch's job).
+// static - no polling needed here (that's useElevatorReferenceEpoch's job).
 export function useElevatorSchedule(
   clientId: string,
   addressId: string,

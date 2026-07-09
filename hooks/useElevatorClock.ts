@@ -24,7 +24,7 @@ export function useElevatorClock(
 
   useEffect(() => {
     if (!schedule) {
-      // Nothing to subscribe to yet — the render-time check below already
+      // Nothing to subscribe to yet - the render-time check below already
       // reports LOADING_STATE while schedule is null, so there's nothing to
       // do here.
       return;

@@ -1,7 +1,7 @@
 import type { Direction } from "../../lib/elevator/types";
 import styles from "./DirectionArrow.module.css";
 
-// Inline SVG rather than a font glyph — renders identically across
+// Inline SVG rather than a font glyph - renders identically across
 // Android/iOS/desktop regardless of font fallback quirks.
 export function DirectionArrow({ direction }: { direction: Direction }) {
   if (direction === 0) {

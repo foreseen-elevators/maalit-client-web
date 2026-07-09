@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "מעלית שבת — תצוגת מצב מעליות",
+    name: "מעלית שבת - תצוגת מצב מעליות",
     short_name: "מעלית שבת",
     description: "תצוגת מצב מעליות שבת חיה",
     start_url: "/",

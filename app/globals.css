@@ -1,4 +1,4 @@
-/* Single dark theme throughout — this is a kiosk-style lobby display first
+/* Single dark theme throughout - this is a kiosk-style lobby display first
    (matches the physical ESP32 screens' black background), and a normal web
    page second, so we don't branch on prefers-color-scheme. */
 :root {

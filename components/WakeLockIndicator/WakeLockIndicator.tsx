@@ -5,8 +5,8 @@ import styles from "./WakeLockIndicator.module.css";
 const LABELS: Record<WakeLockStatus, string> = {
   active: "המסך יישאר דלוק",
   inactive: "מתחבר...",
-  denied: "לא ניתן למנוע כיבוי מסך — למדריך",
-  unsupported: "הדפדפן לא תומך במניעת כיבוי מסך — למדריך",
+  denied: "לא ניתן למנוע כיבוי מסך - למדריך",
+  unsupported: "הדפדפן לא תומך במניעת כיבוי מסך - למדריך",
 };
 
 export function WakeLockIndicator({ status }: { status: WakeLockStatus }) {

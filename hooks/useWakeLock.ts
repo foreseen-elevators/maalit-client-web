@@ -10,7 +10,7 @@ interface WakeLockState {
 }
 
 // Acquires navigator.wakeLock.request('screen') to keep the display from
-// sleeping, and re-acquires it whenever the tab becomes visible again — the
+// sleeping, and re-acquires it whenever the tab becomes visible again - the
 // spec/browsers release the lock automatically on backgrounding, and that
 // cannot be prevented, only promptly recovered from.
 export function useWakeLock(): WakeLockState {

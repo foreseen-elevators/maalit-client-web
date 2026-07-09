@@ -10,7 +10,7 @@
   padding: clamp(0.5rem, 2vw, 1.5rem);
 }
 
-/* Below this width, stack tiles instead of squeezing them into a row —
+/* Below this width, stack tiles instead of squeezing them into a row -
    keeps the big number legible on narrow phones in portrait. */
 @media (max-width: 640px) {
   .grid[data-count="2"],

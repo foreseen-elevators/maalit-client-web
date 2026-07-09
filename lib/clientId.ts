@@ -11,7 +11,7 @@ function randomId(): string {
 
 // The backend just needs any non-empty, stable-per-browser string for its
 // `id` query param (it's the "device id" concept borrowed from the physical
-// screens — not validated against a registry for the routes this app uses).
+// screens - not validated against a registry for the routes this app uses).
 export function getClientId(): string {
   if (typeof window === "undefined") {
     return "server";
@@ -26,7 +26,7 @@ export function getClientId(): string {
     window.localStorage.setItem(CLIENT_ID_STORAGE_KEY, id);
     return id;
   } catch {
-    // localStorage unavailable (private mode, disabled storage, etc.) —
+    // localStorage unavailable (private mode, disabled storage, etc.) -
     // fall back to a per-session id so requests still work.
     return randomId();
   }

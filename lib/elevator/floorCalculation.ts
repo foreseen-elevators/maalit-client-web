@@ -23,7 +23,7 @@ export function computeDirection(
   for (let j = currentIndex + 1; j < schedule.length; j++) {
     const next = schedule[j];
     if (next === INVALID_FLOOR) {
-      break; // no more populated data — wrap around below
+      break; // no more populated data - wrap around below
     }
     if (next !== currentFloor) {
       return next > currentFloor ? 1 : -1;
