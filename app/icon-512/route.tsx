@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og";
-import { IconArt } from "../../lib/iconArt";
+import { ManifestIcon } from "../../lib/manifestIcon";
 
 const size = { width: 512, height: 512 };
 
 export async function GET() {
-  return new ImageResponse(<IconArt size={size.width} />, size);
+  return new ImageResponse(<ManifestIcon size={size.width} />, size);
 }
