@@ -23,8 +23,21 @@
   gap: 1rem;
 }
 
+.footerLinks {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .backLink {
   color: var(--muted);
   font-size: clamp(0.8rem, 2vw, 1rem);
   text-decoration: underline;
+}
+
+.currentAddress {
+  color: var(--foreground);
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  font-weight: 700;
 }

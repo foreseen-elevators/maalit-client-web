@@ -1,0 +1,8 @@
+.disclaimer {
+  width: 100%;
+  text-align: center;
+  font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+  color: var(--muted);
+  padding: 0.5rem 1rem;
+  line-height: 1.5;
+}

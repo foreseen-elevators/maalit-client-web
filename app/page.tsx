@@ -1,15 +1,35 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AddressSearch } from "../components/AddressSearch/AddressSearch";
+import { useLastAddressId } from "../hooks/useLastAddressId";
 import type { AddressEntry } from "../lib/api/addressList";
 import styles from "./page.module.css";
 
-export default function HomePage() {
+function HomeContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const lastAddressId = useLastAddressId();
+  const forceChange = searchParams.get("change") === "1";
+  const shouldRedirect = !forceChange && !!lastAddressId;
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      router.replace(`/elevators/${lastAddressId}`);
+    }
+  }, [shouldRedirect, lastAddressId, router]);
 
   function handleSelect(address: AddressEntry) {
     router.push(`/elevators/${address.id}`);
+  }
+
+  if (shouldRedirect) {
+    return (
+      <main className={styles.main}>
+        <p className={styles.subtitle}>טוען את הכתובת האחרונה...</p>
+      </main>
+    );
   }
 
   return (
@@ -18,5 +38,13 @@ export default function HomePage() {
       <p className={styles.subtitle}>בחרו כתובת כדי לראות את מצב המעליות</p>
       <AddressSearch onSelect={handleSelect} />
     </main>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense>
+      <HomeContent />
+    </Suspense>
   );
 }

@@ -45,7 +45,12 @@ this app.
   polling (every 2 minutes, matching the physical screens), and the 1-second
   display tick (wall-clock driven, self-correcting after tab throttling).
 - `components/` - `AddressSearch` (RTL typeahead), `ElevatorGrid`/`ElevatorTile`
-  (responsive 1-3 elevator display), `WakeLockIndicator`, `ShabbatBanner`.
+  (responsive 1-3 elevator display), `WakeLockIndicator`, `ShabbatBanner`
+  (red "don't touch the phone" reminder during Shabbat / info note otherwise),
+  `Disclaimer` (always-visible floor-accuracy note).
+- `lib/lastAddress.ts` + `hooks/useLastAddressId.ts` - remembers the last
+  address in `localStorage` so `/` auto-redirects a returning visitor
+  straight to it (`/?change=1` is the escape hatch back to the picker).
 - `app/kiosk-help` - honest instructions for the OS-level lockdown a website
   cannot do on its own (Android Screen Pinning, iOS Guided Access).
 

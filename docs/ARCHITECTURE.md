@@ -110,13 +110,20 @@ be easy to miss and hard to notice visually, so it has its own test suite
 
 ```
 app/page.tsx (address search)
+   ├─ useLastAddressId()       → localStorage: redirect straight to the
+   │                             last-viewed address, unless ?change=1
    └─ AddressSearch component ── useAddressList() ── GET /addressList
         │ (user picks an address)
         ▼
 app/elevators/[addressId]/page.tsx
    ├─ useClientId()            → the persisted per-browser id
    ├─ useAllConfigScreen()     → GET /allConfigScreen → numOfElevators, file1/2/3
-   ├─ useShabbatStatus()       → GET /shabbatScreen (banner only)
+   ├─ useAddressList()         → looked up again here to show the address's
+   │                             name (in the footer, next to "בחירת כתובת אחרת")
+   ├─ setLastAddressId()       → called once config loads successfully, so
+   │                             both picking an address AND visiting a
+   │                             direct/bookmarked link remember it
+   ├─ useShabbatStatus()       → GET /shabbatScreen → ShabbatBanner
    ├─ useWakeLock()            → keeps the screen on
    └─ ElevatorGrid (1-3 tiles)
         └─ ElevatorTile (one per elevator, fully independent)
@@ -129,6 +136,20 @@ Each `ElevatorTile` owns its entire data lifecycle independently. That's
 intentional: with 3 tiles polling and ticking, nothing about one elevator's
 update should force the other two to re-render or refetch.
 
+### Remembering the last address
+
+`lib/lastAddress.ts` persists the last successfully-loaded address id to
+`localStorage`, read back via `hooks/useLastAddressId.ts` (the same
+`useSyncExternalStore` pattern as `useClientId` — see below). `app/page.tsx`
+uses it to skip the address picker entirely and redirect straight to
+`/elevators/<id>` for a returning visitor.
+
+That auto-redirect needs an escape hatch, or clicking "בחירת כתובת אחרת"
+(choose a different address) would just bounce back to the same address
+immediately. `/?change=1` is that escape hatch — the elevator page's "choose
+a different address" link points there instead of plain `/`, and the
+landing page skips the redirect whenever that query param is present.
+
 ### Staying correct when the tab is backgrounded
 
 Phones lock/background constantly, and browsers throttle timers when a tab
@@ -136,6 +157,25 @@ isn't visible. Every hook that polls or ticks (`useElevatorReferenceEpoch`,
 `useElevatorClock`, `useWakeLock`) listens for the page's `visibilitychange`
 event and immediately re-syncs the moment the tab becomes visible again,
 rather than waiting for its next scheduled interval.
+
+## Shabbat banner and the floor-accuracy disclaimer
+
+`ShabbatBanner` shares one banner slot at the top of the elevator display,
+and shows one of two messages depending on live `/shabbatScreen` status —
+never used to gate or block the display itself:
+
+- **During Shabbat/chag**: a bold red reminder not to touch the phone
+  (`אסור לגעת בטלפון במהלך השבת`) — this app is meant to be glanced at on a
+  pre-positioned device, not interacted with, during Shabbat itself.
+- **Not currently Shabbat/chag**: a muted note that the elevator may be back
+  in normal (button-operated) service and the display may not reflect that.
+
+Separately, `Disclaimer` (`components/Disclaimer/Disclaimer.tsx`) is always
+visible under the elevator tiles, regardless of Shabbat status — it explains
+that the floor number is a computed estimate, not a direct reading from the
+elevator controller, and encourages waiting a moment rather than trusting it
+to the second. This is deliberately unrelated to `/kiosk-help` (a different
+concern — data accuracy vs. device lockdown) and doesn't link there.
 
 ## Wake Lock (keeping the screen on)
 
@@ -145,9 +185,12 @@ rather than waiting for its next scheduled interval.
 - The browser/OS **always** releases the lock when the tab is backgrounded -
   there is no way to prevent that, only to re-acquire it promptly when the
   tab comes back (which this hook does automatically).
-- It's feature-detected. Where it's unsupported (older browsers), the app
-  shows a small badge pointing at `/kiosk-help` instead of pretending to
-  work - see below for why that page exists.
+- It's feature-detected. Where it's unsupported or denied, the
+  `WakeLockIndicator` badge itself links to `/kiosk-help`. There's also an
+  always-visible "הגדרת מסך קבוע" link in the elevator page's footer —
+  Wake Lock working fine doesn't mean Screen Pinning/Guided Access aren't
+  still useful for whoever is setting up a permanently-mounted lobby
+  device, so that link isn't conditioned on Wake Lock status at all.
 
 ## The honest limit: `/kiosk-help`
 
@@ -169,8 +212,12 @@ phone/tablet as a lobby display - the app cannot turn them on for you.
 `app/manifest.ts` and the iOS meta tags in `app/layout.tsx` let the site be
 installed to a home screen in `standalone` mode (looks like a dedicated
 app, no browser chrome). The app icons (`app/icon.tsx`, `app/apple-icon.tsx`,
-`app/icon-192|512|512-maskable/route.tsx`) are generated in code via
-Next's `ImageResponse` - there are no binary image files to maintain.
+`app/icon-192|512|512-maskable/route.tsx`) are all generated at the exact
+size each context needs via Next's `ImageResponse`, rendering the one
+source logo (`public/icon-source.png`, read via `lib/iconSource.ts`) through
+`lib/manifestIcon.tsx` — the 512 maskable variant adds safe-zone padding so
+Android's adaptive-icon mask doesn't crop it. There's only the one binary
+asset to maintain; every size is derived from it in code.
 
 There's deliberately **no service worker**. Everything this app shows is
 live-polled; a cached offline copy of "what floor the elevator was on" would
@@ -193,3 +240,6 @@ The only environment-specific setting is `NEXT_PUBLIC_API_BASE_URL`
 | Polling/ticking/lifecycle behavior | `hooks/*.ts` |
 | What a tile/page looks like | `components/*` and `app/**/page.tsx` + their `.module.css` |
 | Kiosk/PWA behavior | `hooks/useWakeLock.ts`, `app/manifest.ts`, `app/kiosk-help/page.tsx` |
+| App icons | `public/icon-source.png`, `lib/iconSource.ts`, `lib/manifestIcon.tsx` |
+| Remembering/redirecting to the last address | `lib/lastAddress.ts`, `hooks/useLastAddressId.ts`, `app/page.tsx` |
+| The Shabbat banner or floor-accuracy disclaimer wording | `components/ShabbatBanner/`, `components/Disclaimer/` |

@@ -45,6 +45,10 @@
   line-height: 1.6;
 }
 
+.section p {
+  line-height: 1.6;
+}
+
 .note {
   margin-top: 0.75rem;
   color: var(--muted);

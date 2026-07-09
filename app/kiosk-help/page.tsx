@@ -52,10 +52,6 @@ export default function KioskHelpPage() {
             הסיסמה שהוגדר.
           </li>
         </ol>
-        <p className={styles.note}>
-          חשוב לשמור את קוד הסיסמה במקום נגיש לצוות הבניין - שכחתו נועל את
-          המכשיר על מסך זה בלבד.
-        </p>
       </section>
 
       <section className={styles.section}>
