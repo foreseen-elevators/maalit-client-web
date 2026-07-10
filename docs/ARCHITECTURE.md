@@ -165,7 +165,7 @@ and shows one of two messages depending on live `/shabbatScreen` status —
 never used to gate or block the display itself:
 
 - **During Shabbat/chag**: a bold red reminder not to touch the phone
-  (`אסור לגעת בטלפון במהלך השבת`) — this app is meant to be glanced at on a
+  (`אסור לגעת במסך במהלך השבת`) — this app is meant to be glanced at on a
   pre-positioned device, not interacted with, during Shabbat itself.
 - **Not currently Shabbat/chag**: a muted note that the elevator may be back
   in normal (button-operated) service and the display may not reflect that.

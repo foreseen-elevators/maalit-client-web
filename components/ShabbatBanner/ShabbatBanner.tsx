@@ -9,7 +9,7 @@ export function ShabbatBanner({ isShabbat }: { isShabbat: boolean | null }) {
   if (isShabbat) {
     return (
       <div className={styles.banner} data-variant="shabbat">
-        אסור לגעת בטלפון במהלך השבת
+        אסור לגעת במסך במהלך השבת
       </div>
     );
   }
