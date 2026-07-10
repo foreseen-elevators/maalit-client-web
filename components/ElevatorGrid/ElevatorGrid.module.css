@@ -1,5 +1,9 @@
 .grid {
   display: flex;
+  /* The document is RTL, so plain "row" would lay elevator 1 out on the
+     right and count down leftward. row-reverse flips the visual order
+     back to left-to-right (elevator 1 leftmost) when tiles sit in a row. */
+  flex-direction: row-reverse;
   flex-wrap: wrap;
   align-items: stretch;
   justify-content: center;
