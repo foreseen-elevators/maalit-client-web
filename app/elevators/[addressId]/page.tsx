@@ -12,6 +12,7 @@ import { elevatorCountFrom } from "../../../lib/api/allConfigScreen";
 import { setLastAddressId } from "../../../lib/lastAddress";
 import { ElevatorGrid } from "../../../components/ElevatorGrid/ElevatorGrid";
 import { ShabbatBanner } from "../../../components/ShabbatBanner/ShabbatBanner";
+import { ShabbatInfo } from "../../../components/ShabbatInfo/ShabbatInfo";
 import { WakeLockIndicator } from "../../../components/WakeLockIndicator/WakeLockIndicator";
 import { Disclaimer } from "../../../components/Disclaimer/Disclaimer";
 import styles from "./page.module.css";
@@ -60,6 +61,7 @@ export default function ElevatorDisplayPage() {
   return (
     <main className={styles.main}>
       <ShabbatBanner isShabbat={isShabbat} />
+      <ShabbatInfo />
       <ElevatorGrid
         clientId={clientId}
         addressId={addressId}
